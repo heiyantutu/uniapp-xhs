@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { hideCode } from "@/utils/utils";
 
 export const timeFilter = (val: string): string => {
   return dayjs(val).format('YYYY年MM月DD日');
@@ -62,7 +63,7 @@ export const sensitiveIdNo = (idNo: string): string => {
     if (!idNo) {
       return "";
     } else {
-      return idNo.slice(0, -4) + "****";
+      return idNo.substring(0, 3) + '*'.repeat(idNo.length - 6) + idNo.substring(idNo.length - 3);
     }
   } catch (error) {
     return "";
@@ -91,4 +92,23 @@ export const sensitiveName = (name: string): string => {
   } catch (error) {
     return "";
   }
+}
+export const priceFormat = (val: number): number => {
+  let fixedAmount = val.toFixed(2);
+
+  return fixedAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+export const valFormat = (val: number): number => {
+  let fixedAmount = Number(val.toFixed(2));
+  return fixedAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+export const hideIdCard = (val: any, idCode: any) => {
+  
+  try {
+    return val.substring(0, 3) + '*'.repeat(val.length - 6) + val.substring(val.length - 3);
+  } catch (error) {
+    return val;
+  }
+  
 }

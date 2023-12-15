@@ -5,7 +5,7 @@
 			<div class="tabs" :class="flex?'flex '+type:type">
 				<div v-if="type==='line'" class="tabs_line" :style="lineStyle"></div>
 				<div class="tab" v-for="(item,i) in datas" :key="i"
-					:style="active==item.id?tabViewActStyle:tabViewStyle" :class="{'active':active==item.id}"
+					:style="active==item.id?tabViewActStyle:tabViewStyle" :class="{'active':active==item.id, full: fullWidth}"
 					@click="clickTab(item,i)" >
 					<div class="icon" v-if="type=='pic'||type=='img'"
 						:style="{'background':'url('+item.icon+') center top/auto 25px no-repeat;'}"></div>
@@ -35,8 +35,8 @@
 				scrollable: false,
 				scrollLeft: 0,
 				currentIndex: 0,
-				lineWidth: 40,
-				lineHeight: 3,
+				lineWidth: 32,
+				lineHeight: 2,
 				duration: 0.3,
 				lineOffsetLeft: 0,
 				active: '',
@@ -46,6 +46,18 @@
 			}
 		},
 		props: {
+			canCancel:{
+				type: Boolean,
+				default () {
+					return false;
+				},
+			},
+			isAjax:{
+				type: Boolean,
+				default () {
+					return false;
+				},
+			},
 			flexNum: {
 				type: String,
 				default () {
@@ -130,6 +142,19 @@
 				},
 
 			},
+			init: {
+				type: Boolean,
+				default () {
+					return true;
+				},
+			
+			},
+			fullWidth: {
+				type: Boolean,
+				default () {
+					return false;
+				},
+			}
 
 		},
 		watch: {
@@ -213,7 +238,10 @@
 			}
 		},
 		mounted() {
-			if (!this.activeType) {
+			if(this.activeType) {
+				this.active = this.activeType
+			}
+			if (!this.activeType&&this.init) {
 				
 				if (this.datas && this.datas.length > 0) {
 					this.active = this.datas[0].id
@@ -280,11 +308,20 @@
 				});
 			},
 			clickTab(tab, index) {
-				if (this.active == tab.id) {
+				if(this.isAjax){
 					return;
 				}
-
+				if (this.active == tab.id) {
+					if(this.canCancel){
+						tab = {}
+					}else{
+						return;
+					}
+					
+				}
+		
 				if (this.canTab) {
+							
 					this.active = tab.id
 					this.$emit('clickTab', tab, index)
 				}
@@ -295,7 +332,12 @@
 </script>
 
 <style lang="less" scoped>
-
+	/deep/::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+		color: transparent;
+	}
 	.tabs_ui {
 
 		&.canShow{
@@ -317,10 +359,10 @@
 			bottom: 5px;
 			left: -9px;
 			z-index: 1;
-			width: 40px;
-			height: 3px;
+			width: 32px;
+			height: 2px;
 			background-color: #fff;
-			border-radius: 3px;
+			
 
 		}
 
@@ -337,16 +379,30 @@
 			&.flex{
 				display: flex;
 				.tab{
-					flex: 1;
+					display: inline-flex;
+					&.full {
+						flex: 1;
+					}
 				}
 			}
 			&.line {
-
+				margin: 0 6px;
 				.tab {
 					margin: 0;
+					padding: 0 14px;
 				}
 			}
-
+			&.fk{
+				padding-bottom: 4px;
+				.tab{
+					font-size:12px;
+					&.active {
+						font-size: 12px;
+						
+						font-weight: 500;
+					}
+				}
+			}
 			&.pic {
 				.tab {
 					height: 48px;
@@ -373,11 +429,11 @@
 
 
 				&.active {
-
+					font-size: 16px;
 					.qp {
 						display: block;
 					}
-					font-weight: bold;
+					font-weight: 500;
 				}
 
 				.icon {

@@ -1,20 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <script>
-      var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') ||
-        CSS.supports('top: constant(a)'))
-      document.write(
-        '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
-        (coverSupport ? ', viewport-fit=cover' : '') + '" />')
-    </script>
-    <title></title>
-    <!--preload-links-->
-    <!--app-context-->
-  </head>
-  <body>
-    <div id="app"><!--app-html--></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') ||
+      CSS.supports('top: constant(a)'))
+    document.write(
+      '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
+      (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+  </script>
+  <script src="https://cdn.ihotel.cn/cmblapi/11.4.0_20230809104229/cmblapi.min.js"></script>
+  <title></title>
+  <!--preload-links-->
+  <!--app-context-->
+  <script>
+      (function (w, d, s, q) {
+        w[q] = w[q] || [];
+        var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+        j.async = true;
+        j.id = 'beacon-aplus';
+        j.src = 'https://d.alicdn.com/alilog/mlog/aplus/203561150.js';
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'aplus_queue');
+    aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['appKey', 'hf3e80lky0403up5lylnwlw6'] })
+    aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['aplus-rhost-v', 'quickaplus-he-api-cn-shanghai.aliyuncs.com'] });  
+  </script>
+  <script src="https://fe-static-1251524319.cos.ap-shanghai.myqcloud.com/xhs-mp/open/js/xiaohongshu-3.8.0.js"></script>
+  <style>
+    @font-face {
+      font-family: "Montserrat";
+      src:url("https://dsplatweb.oss-cn-chengdu.aliyuncs.com/font/Montserrat-Regular.otf");
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Source Han Serif CN";
+      src:url("https://dsplatweb.oss-cn-chengdu.aliyuncs.com/font/SourceHanSerifCN-Regular.otf");
+      font-display: swap;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"><!--app-html--></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

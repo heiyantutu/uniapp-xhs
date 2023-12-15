@@ -4,15 +4,15 @@
       {{datas.title}}
     </p>
     <div :class="datas.sortType" class="list">
-      <button v-bind:class="{ 'arrow' : datas.sortType!=='rows','rows':datas.sortType=='rows'}"
-        v-for="(urlItem, urlIndex) in urls" :key="urlIndex" @click.stop="goUrlAction(urlItem)" class="listItem"
-        :open-type="urlItem.desc== kfName?'contact':''">
+      <button v-bind:class="{'rows':datas.sortType=='rows'}" v-for="(urlItem, urlIndex) in urls" :key="urlIndex"
+        @click.stop="goUrlAction(urlItem)" class="listItem">
         <img :src="urlItem.logo" alt="" class="logo" v-if="urlItem.logo" />
         <p class="itemDesc">{{ urlItem.desc }}</p>
         <div class="moreDesc" v-if="datas.sortType !=='rows'">
           <img :src="urlItem.descLogo" alt="" class="logo" v-if="urlItem.descLogo" />
           <span class="moreText" v-if="urlItem.moreDesc">{{urlItem.moreDesc}}</span>
         </div>
+        <i class="icon iconfont icon-a-16_youlajiantou_hei"></i>
       </button>
     </div>
   </div>
@@ -20,6 +20,8 @@
 <script>
 import { goPage, goPageWithUser } from "@/utils/utils";
 import { jAlert3 } from "@/base/jAlert/jAlert";
+import UmengSDK from "@/utils/umengAdaptor.js";
+
 export default {
   data() {
     return {
@@ -40,7 +42,17 @@ export default {
           jAlert3("敬请期待");
           return false;
         }
+        UmengSDK.sendEvent("mp_button_clk", {
+          button_id: item.url,
+          button_name: item.desc,
+        });
+        if(item.business == "invite"){
+          this.$emit("inviteClick");
+          return 
+        }
         goPageWithUser(item.url);
+      } else {
+        this.$emit("kfClick");
       }
     },
   },
@@ -70,10 +82,15 @@ export default {
   overflow: hidden;
   margin-top: 10px;
   margin: 0 auto;
-  box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.11);
   border-radius: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   background: #ffffff;
+  position: relative;
+  z-index: 1;
+  .icon-a-16_youlajiantou_hei {
+    margin-right: 12px;
+    color: #000;
+  }
   .tapListTitle {
     height: 36px;
     position: relative;
@@ -97,14 +114,14 @@ export default {
         margin-right: 0;
       }
       .itemDesc {
-        margin-left: 20px;
+        margin-left: 12px;
       }
       .moreDesc {
         display: flex;
         flex: 1;
         align-items: center;
         justify-content: flex-end;
-        margin-right: 35px;
+        margin-right: 5px;
         .moreText {
           font-size: 14px;
           color: #808080;
@@ -164,17 +181,9 @@ export default {
         }
       }
       &.arrow::after {
-        left: calc(~"100% - 15px");
+        left: calc(~"100% - 12px");
         border-right: 1px solid #000000;
         border-top: 1px solid #000000;
-      }
-      i {
-        font-size: 24px;
-        width: 65px;
-        text-align: center;
-        &.icon-lipin {
-          font-size: 28px;
-        }
       }
       .itemDesc {
         font-size: 14px;

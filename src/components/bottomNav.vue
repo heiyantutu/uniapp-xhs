@@ -1,7 +1,8 @@
 <template>
   <div class="bottomNav" v-if="navList.length>0">
     <div class="nav-box">
-      <div class="nav-item" :class="{active:item.curPage}" @click='goPage(item)' v-for="(item,i) in navList" :key="i">
+      <div class="nav-item" :class="{active:item.curPage}" @click='tabbarUrl(item)' v-for="(item,i) in navList"
+        :key="i">
         <img :src="item.logoA" v-if="!item.curPage" mode="aspectFit" :class="{'large':item.isLarge=='T'}" class="logo">
         <img :src="item.logoB" v-if="item.curPage" mode="aspectFit" :class="{'large':item.isLarge=='T'}" class="logo">
         <p :class="{'largeTxt':item.isLarge=='T'}" class="desc">{{item.desc}}</p>
@@ -18,8 +19,9 @@
 <script>
 import api from "@/utils/api";
 import { setStorage, getStorage, removeStorage } from "@/utils/wxuser";
+import { goPage, isCmbchina } from "@/utils/utils";
 
-var config = {}; 
+var config = {};
 export default {
   data() {
     return {
@@ -34,28 +36,21 @@ export default {
   },
 
   methods: {
-    goPage(item) {
+    tabbarUrl(item) {
+      // #ifdef MP
       if (item.curPage) {
         return;
       }
-      if (item.isH5) {
-        uni.navigateTo({
-          url: "/pages/mall/webview?url=" + encodeURIComponent(item.url),
-        });
+      // #endif
+      if (item.query) {
+        setStorage("query", item.query);
       } else {
-        if (item.query) {
-          setStorage("query", item.query);
-        } else {
-          removeStorage("query");
-        }
-        uni.switchTab({
-          url: item.path,
-          fail: (res) => {
-            uni.navigateTo({
-              url: item.path,
-            });
-          },
-        });
+        removeStorage("query");
+      }
+      if (isCmbchina() && item.url == "/pages/member/memberCenter") {
+        window.open(`${window.location.origin}/tripV2/#${item.url}`);
+      } else {
+        goPage(item.url);
       }
     },
     getNav() {
@@ -91,6 +86,10 @@ export default {
     },
   },
   mounted() {
+    // #ifdef H5 || MP-XHS
+    // @ts-ignore
+    uni.hideTabBar();
+    // #endif
     if (getStorage("navList")) {
       this.navList = getStorage("navList");
       var pages = getCurrentPages();
@@ -131,14 +130,12 @@ export default {
   left: 0;
   width: 100%;
   display: flex;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: inset 0px 1px 0px 0px rgba(235, 235, 235, 1);
+  background: #fff;
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
 
   .nav-box {
     width: 100%;
-    background: #fff;
     display: flex;
     box-sizing: border-box;
     height: 100rpx;

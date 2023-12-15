@@ -1,6 +1,6 @@
 <template>
   <div class="ui_kfDialog">
-    <bottom-dialog :title="title" ref="kfDialog">
+    <bottom-dialog :title="title" ref="kfDialog" :sideslip="sideslip">
       <div class="receive_mian">
         <div class="consult_list" @click="kfAction">
           <div>
@@ -27,6 +27,7 @@
 <script>
 import bottomDialog from "@/components/bottomDialog.vue";
 import { getStorage } from "@/utils/wxuser";
+import { goPage } from "@/utils/utils";
 import api from "@/utils/api";
 
 let config = getStorage("config");
@@ -39,11 +40,20 @@ export default {
     return {
       phoneNum: "400-0000-830",
       desc: "",
-      wxCustomerServiceUrl: "",
+      wxCustomerServiceUrl: "https://imxcx19.7x24cc.com/phone_webChat.html?accountId=N000000035959&chatId=19ec8dcd-9c0c-40a7-863a-52124bcd83d3",
       wxCustomerCorpId: "",
+      user:{
+        
+      }
     };
   },
   props: {
+    sideslip: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
     title: {
       type: String,
       default: "客服服务",
@@ -51,7 +61,8 @@ export default {
   },
   methods: {
     kfAction() {
-      wx.openCustomerServiceChat({
+      goPage(this.wxCustomerServiceUrl);
+      /* wx.openCustomerServiceChat({
         extInfo: { url: this.wxCustomerServiceUrl },
         corpId: this.wxCustomerCorpId,
         success(res) {
@@ -60,7 +71,7 @@ export default {
         fail(err) {
           console.log(err);
         },
-      });
+      }); */
     },
     getfunctionControl() {
       var codes = [
@@ -98,8 +109,9 @@ export default {
             });
           }
           if (!self.desc) {
-            self.desc = "引导话术引导话术引导话术。";
+            self.desc = "解答咨询、预订、会员及订单相关问题";
           }
+          self.wxCustomerServiceUrl = `${self.wxCustomerServiceUrl}&nickName=${self.user?.name}&phone=${self.user?.mobile}`
         })
         .catch((err) => {
           console.log(err);
@@ -118,6 +130,7 @@ export default {
     },
   },
   mounted() {
+    this.user = getStorage("user");
     this.getfunctionControl();
   },
   created() {},
@@ -128,7 +141,7 @@ export default {
 .ui_kfDialog {
   .receive_mian {
     padding: 16px;
-    min-height: 50vh;
+    height:316px;
     .consult_list {
       border-radius: 8px;
       margin-bottom: 12px;

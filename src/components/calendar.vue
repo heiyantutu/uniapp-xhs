@@ -17,7 +17,7 @@
             <div class='weekDay'>五</div>
             <div class='weekDay red'>六</div>
           </div>
-          <div class="monthBoxWrapper">
+          <div class="monthBoxWrapper" :style="{'max-height':maxHeight}">
             <div class="monthBox" v-for='(month,monthIndex) in timeArr' :key="monthIndex">
               <div class="monthTitle">
                 <span class="theMonthTitle">{{month.currentTitle}}</span>
@@ -55,6 +55,7 @@ import dayjs from "dayjs";
 import { jAlert3 } from "@/base/jAlert/jAlert";
 import { setStorage, getStorage } from "@/utils/wxuser";
 import { hexToRgba } from "@/utils/utils";
+import { getMenuButtonBoundingClientRect } from "@/utils/platform";
 
 export default {
   name: "calendar",
@@ -80,12 +81,34 @@ export default {
       fadeColor: "",
       isCheckedInTxt: "入住",
       isCheckedOutTxt: "离店",
+      maxHeight: "80vh",
+      isAutoColse: "T",
+	  stayMax:null,
     };
   },
   mounted() {
     if (this.colorTheme) {
       this.fadeColor = hexToRgba(this.colorTheme, 0.2);
     }
+    // #ifdef MP
+    uni.getSystemInfo({
+      success: (res) => {
+        const menuButton = getMenuButtonBoundingClientRect();
+        console.log(menuButton, res.screenHeight, res.statusBarHeight);
+        this.maxHeight =
+          res.screenHeight -
+          menuButton.top -
+          menuButton.height -
+          6 -
+          56 -
+          36 +
+          "px";
+      },
+      fail(err) {
+        console.log(err);
+      },
+    });
+    // #endif
   },
   beforeDestroy() {},
   methods: {
@@ -97,10 +120,24 @@ export default {
     showDialog() {
       this.isShowDialog = true;
       this.$emit("no-scroll", true);
+      // #ifdef MP-WEIXIN
+      wx.setPageStyle({
+        style: {
+          overflow: "hidden",
+        },
+      });
+      // #endif
     },
     hideDialog() {
       this.isShowDialog = false;
       this.$emit("no-scroll", false);
+      // #ifdef MP-WEIXIN
+      wx.setPageStyle({
+        style: {
+          overflow: "",
+        },
+      });
+      // #endif
     },
     createDate() {
       let calendar = 366;
@@ -213,15 +250,25 @@ export default {
           item.isCheckedIn = true;
           this.isTap = false;
         } else {
+          if(this.stayMax){
+            var nightNum = dayjs(item.day).diff(this.checkInDay, 'day');
+            if(nightNum>this.stayMax){
+              jAlert3(`最多选择${this.stayMax}天`);
+              this.isTap = false;
+              return false;
+            }
+          }
           this.checkOutDay = item.day;
           item.isCheckedOut = true;
           this.selcetBetween();
           this.flag = 0;
           this.emitSelectDay();
           this.isTap = false;
-          setTimeout(() => {
-            this.hideDialog();
-          }, 1000);
+          if (this.isAutoColse=="T") {
+            setTimeout(() => {
+              this.hideDialog();
+            }, 1000);
+          }
         }
         return false;
       }
@@ -291,6 +338,12 @@ export default {
       if (obj.isCheckedOutTxt) {
         this.isCheckedOutTxt = obj.isCheckedOutTxt;
       }
+      if (obj.isAutoColse) {
+        this.isAutoColse = obj.isAutoColse || "T";
+      }
+      if (obj.stayMax) {
+        this.stayMax = obj.stayMax || "";
+      }
       this.createDate();
       this.initCalendar();
     },
@@ -323,6 +376,7 @@ export default {
 };
 </script>
 <style lang="less">
+@import (reference) url("~@/styles/mixin.less");
 .bottomDialogBoxCalendar {
   .bottomDialogMask {
     width: 100vw;
@@ -346,18 +400,20 @@ export default {
       text-align: center;
       font-size: 18px;
       color: #000;
-      font-weight: bold;
+      font-weight: 600;
       background: #fff;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
       position: relative;
       .iconfont {
-        position: absolute;
+        position: absolute !important;
         color: #000000;
-        font-size: 18px;
-        left: 5px;
-        top: -10px;
-        border: 10px solid transparent;
+        font-size: 20px;
+        left: 18px;
+        top: 18px;
+        //border: 10px solid transparent;
+        .expandClick();
+        line-height: 1;
       }
     }
     .dialogBox {
@@ -387,16 +443,20 @@ export default {
             max-height: 420px;
             overflow-y: scroll;
             padding: 0 6px;
+            background: #f2f3f5;
           }
           .monthBox {
             .monthTitle {
               padding-left: 16px;
-              padding-top: 7px;
+              padding-top: 5px;
+              padding-bottom: 5px;
+              border-bottom: 1px solid #f8f8f8;
+              margin: 0 -6px;
               .theMonthTitle {
                 font-size: 14px;
                 color: #000;
                 position: relative;
-                font-weight: bold;
+                font-weight: 500;
               }
             }
             .monthDay {
@@ -404,7 +464,7 @@ export default {
               flex-wrap: wrap;
               .day {
                 width: 14.285%;
-                height: 58px;
+                height: 52px;
                 text-align: center;
                 font-size: 14px;
                 color: #666;
@@ -424,13 +484,13 @@ export default {
                 .currentDay {
                   height: 100%;
                   .day1 {
-                    font-size: 15px;
+                    font-size: 14px;
                     color: #333;
-                    font-weight: bold;
+                    font-weight: 500;
                   }
                   .day2 {
-                    font-size: 8px;
-                    margin-bottom: 5px;
+                    font-size: 10px;
+                    margin-bottom: 2px;
                     margin-top: 10px;
                   }
                 }
@@ -448,7 +508,7 @@ export default {
                   .currentDay {
                     background: #a43127;
                     color: #fff;
-                    border-radius: 3px;
+                    border-radius: 4px;
                     height: 100%;
                     width: 100%;
                   }
@@ -495,7 +555,7 @@ export default {
                   }
                 }
                 &.between {
-                  background: rgba(164, 49, 39, 0.16);
+                  background: #f1e8e7;
                   color: #000;
                 }
               }

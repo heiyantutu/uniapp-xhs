@@ -1,6 +1,7 @@
 <template>
-  <div class="linkItem arrow" @click="chooseLink(linkItem)">
+  <div class="linkItem" @click="chooseLink(linkItem)">
     <p class="title">{{linkItem.name}}</p>
+    <i class="icon iconfont icon-a-16_youlajiantou_hei"></i>
   </div>
 </template>
 
@@ -36,6 +37,7 @@ export default defineComponent({
   align-items: center;
   position: relative;
   padding: 0 12px;
+  justify-content: space-between;
   &.arrow {
     &:after {
       left: calc(~"100% - 12px");

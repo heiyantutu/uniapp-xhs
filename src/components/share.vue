@@ -2,23 +2,56 @@
 	<div class="ui_share">
 		<div class="poster">
 
-			<image class="poster-img" :src="path" mode="widthFix"></image>
-			<l-painter isCanvasToTempFilePath @success="path = $event" hidden
-				css="width: 375px;background:#fff;border-radius: 8px;">
-				<l-painter-image :src="posterInfo.posterImage" css="width:375px;height:500px;object-fit: cover;" />
-				<l-painter-view>
-					<l-painter-text :text="posterInfo.title"
-						css="padding-left: 32px; padding-right: 32px;margin-top:16px;font-size: 20px; fontWeight: bold;" />
+			<image class="poster-img" :src="posterImg" mode="widthFix"></image>
+			<l-painter isCanvasToTempFilePath @success="getPoster($event)" hidden
+				css="width: 375px;height:812px;background:#fff;border-radius: 8px;padding-bottom:24px;" ref="painter">
+				<l-painter-image :src="posterInfo.posterImage" css="width:375px;height:562px;object-fit: cover; border-radius: 8px 8px 0 0;"  v-if="posterInfo.posterImage"/>
+				<l-painter-view css="width:375px;height:562px;" v-else>
 				</l-painter-view>
-				<l-painter-view css="background:#ccc;height:1px;margin:16px 16px 0 16px;">
+				<l-painter-view css="margin-left:24px;margin-top:16px;">
+					<l-painter-text v-if="posterInfo.categorySub=='FreeTravel'" :text="posterInfo.categorySubDesc"
+						css="background: rgba(51, 103, 53, 0.90);padding: 4px;color:#fff;font-size:12px;border-radius:4px;" />
+					<l-painter-text v-else-if="posterInfo.categorySub=='ThemeGroup'" :text="posterInfo.categorySubDesc"
+						css="background: rgba(0, 67, 85, 0.90);padding: 4px;color:#fff;font-size:12px;border-radius:4px;" />
+					<l-painter-text v-else-if="posterInfo.categorySub=='DestPackage'" :text="posterInfo.categorySubDesc"
+						css="background: rgba(219, 137, 0, 0.90);padding: 4px;color:#fff;font-size:12px;border-radius:4px;" />
+					<l-painter-text v-else-if="posterInfo.categorySub=='ButlerCustomized'" :text="posterInfo.categorySubDesc"
+						css="background: rgba(0, 0, 0, 0.9);padding: 4px;color:#FFDF8C;font-size:12px;border-radius:4px;" />
+					<l-painter-text v-else :text="posterInfo.categorySubDesc"
+						css="background: rgba(219, 137, 0, 0.90);padding: 4px;color:#fff;font-size:12px;border-radius:4px;" />
 				</l-painter-view>
-				<l-painter-view>
+				<l-painter-view css="margin-left: 24px; margin-right: 24px;margin-top:12px;">
 					<l-painter-text :text="posterInfo.title"
-						css="padding-left: 32px; padding-right: 32px;margin-top:16px;font-size: 20px; fontWeight: bold;" />
+						css="font-size: 18px; fontWeight: bold;line-clamp:2;line-height:28px;color:#000;" />
+				</l-painter-view>
+
+				<l-painter-view css="margin-left: 24px; margin-right: 24px;margin-top: 6px;">
+					<l-painter-text :text="posterInfo.sketch" css="line-clamp:1;line-height:18px;color:#000;font-size:12px;" />
+				</l-painter-view>
+				<l-painter-view css="margin-left: 24px; margin-right: 24px;margin-top: 4px;">
+					<l-painter-text :text="posterInfo.datas" css="line-height:18px;color:#808080;font-size:12px;line-clamp:1" />
+				</l-painter-view>
+				
+				<l-painter-view css="position:absolute;left:100px;bottom:49px;">
+					<l-painter-view >
+					<l-painter-text :text="posterInfo.price"
+						css="color:#000;font-size:18px;font-family: Montserrat;font-size: 18px;font-weight: 600;line-height: 18px;" />
+					<l-painter-text text="/人起" css="line-height:12px;color:#808080;font-size:12px;margin-top: 4px;"
+						v-if="posterInfo.priceModel=='PEOPLE'" />
+					<l-painter-text text="/套起" css="line-height:12px;color:#808080;font-size:12px;margin-top: 4px;"
+						v-else-if="posterInfo.priceModel=='PACKAGE'" />
+					<l-painter-text text="/起" css="line-height:12px;color:#808080;font-size:12px;margin-top: 4px;"
+						v-else />
+						
+					</l-painter-view>
+					<l-painter-text :text="posterInfo.time" css="line-height:12px;color:#ccc;font-size:12px;margin-top:8px;" />
+				</l-painter-view>
+				<l-painter-view css="position:absolute;left:24px;bottom:36px;" v-if="posterInfo.qrCode">
+					<l-painter-image :src="posterInfo.qrCode" css="width:64px;height:64px;" />
 				</l-painter-view>
 			</l-painter>
 		</div>
-		<!-- <view class="bottom-btns">
+		<view class="bottom-btns">
 			<view class="control-btn-wrap">
 				<view class="control-btn" @click="doDownloadImg">
 					<view class="iconfont icon-a-24_baocuntupian"></view>
@@ -34,7 +67,7 @@
 			<view class="share-close-btn" @click="cancelDialog">
 				取消
 			</view>
-		</view> -->
+		</view>
 
 	</div>
 </template>
@@ -47,35 +80,95 @@
 	export default defineComponent({
 		name: "share",
 		props: {
-			posterInfo: {}
+			posterInfo: {
+				type: Object,
+				default: () => {
+					return {};
+				},
+			},
 		},
-		setup(props) {
-			const path = ref('')
-			const getWxacodeUnlimitUrl = () => {
-				const config = getStorage('config')
-				var opt = {
-					hotelCode: config.hotelCode,
-					hotelGroupCode: config.hotelGroupCode,
-					scene:""
-				}
-
-				api.getWxacodeUnlimitUrl(opt).then((res : any) => {
-					if (res.result == 1) {
-
-					} else {
-						jAlert3(res.msg)
-					}
-					uni.hideLoading();
-
-
-				})
+		setup(props, context) {
+			let posterImg = ref('')
+			let painter = ref()
+			const getPoster = (e : any) => {
+				posterImg.value = e
 			}
-			return {
-				path
+			const doDownloadImg = () => {
+				uni.showLoading({
+					title: '图片保存中...'
+				});
+				painter.value.canvasToTempFilePathSync({
+					fileType: "jpg",
+					// 如果返回的是base64是无法使用 saveImageToPhotosAlbum，需要设置 pathType为url
+					pathType: 'url',
+					quality: 1,
+					success: (res : any) => {
+						console.log(res.tempFilePath);
+						// 非H5 保存到相册
+						// H5 提示用户长按图另存
+						uni.saveImageToPhotosAlbum({
+							filePath: res.tempFilePath,
+							success: function () {
+								uni.hideLoading();
+								uni.showModal({
+									title: '保存成功',
+									showCancel: false,
+									content: '图片已保存到手机相册'
+
+								});
+							},
+							fail: function () {
+								uni.hideLoading();
+								uni.getSetting({
+									success(res) {
+										if (!res.authSetting['scope.writePhotosAlbum']) {
+											uni.showToast({
+												icon: 'none',
+												title: '保存图片失败，请到设置中打开权限后重试'
+											});
+										}
+								
+									}
+								});
+								
+							},
+							complete: function () {
+								
+							}
+						});
+					},
+				});
 			}
+			const cancelDialog = () => {
+				// #ifdef MP-WEIXIN
+				// @ts-ignore
+				 wx.setPageStyle({
+					style: {
+					overflow: "",
+					},
+				});
+				// #endif
+				context.emit("close");
+			}
+
 			onMounted(() => {
-
+				// #ifdef MP-WEIXIN
+				// @ts-ignore 
+				wx.setPageStyle({
+					style: {
+					overflow: "hidden",
+					},
+				});
+				// #endif
 			});
+			return {
+				posterImg,
+				doDownloadImg,
+				cancelDialog,
+				getPoster,
+				painter
+			}
+
 
 		},
 	});
@@ -92,12 +185,22 @@
 		background: rgba(0, 0, 0, 0.76);
 		line-height: 1;
 
+		.poster {
+			overflow-y: auto;
+			width: 100%;
+			height: 100vh;
+			padding-bottom: 200px;
+		}
+
 		.poster-img {
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			top: 10%;
+			// position: absolute;
+			// left: 50%;
+			// transform: translateX(-50%);
+			// top: 10%;
+
+			display: block;
 			width: 68%;
+			margin: 10% auto 0;
 		}
 
 		.bottom-btns {
@@ -109,9 +212,11 @@
 			z-index: 2;
 			border-radius: 16px 16px 0px 0px;
 			overflow: hidden;
+			padding-bottom: constant(safe-area-inset-bottom);
+  			padding-bottom: env(safe-area-inset-bottom);
 
 			.control-btn-wrap {
-				display: flex;
+				display: flex; 
 				align-items: center;
 				justify-content: space-between;
 				box-sizing: border-box;
@@ -154,7 +259,7 @@
 						}
 
 						.btn-text {
-							font-size: 14px;
+							font-size: 12px;
 							color: #808080;
 							line-height: 1;
 							padding-top: 8px;
@@ -181,7 +286,7 @@
 					}
 
 					.btn-text {
-						font-size: 14px;
+						font-size: 12px;
 						color: #808080;
 						line-height: 1;
 						padding-top: 8px;

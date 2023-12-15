@@ -1,20 +1,779 @@
 {
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		}
-	],
-	"globalStyle": {
-		// #ifdef H5
-		"navigationStyle": "custom",
-		// #endif
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "",
-		"handleWebviewPreload": "auto",
-		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#f8f8f8"
-	}
+  "pages": [
+    // #ifndef H5
+    {
+      "path": "pages/travel/preIndex",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom"
+      }
+    },
+    // #endif
+    {
+      "path": "pages/travel/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
+    },
+    {
+      "path": "pages/trip/index",
+      "style": {
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
+    },
+    {
+      "path": "pages/member/memberCenter",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
+    },
+    {
+      "path": "pages/travels/travels",
+      "style": {
+        "navigationBarTitleText": "松赞旅行",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
+    },
+    {
+      "path": "pages/member/memberLogin",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/member/orderList",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/mall/webview",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/scenery/scenery",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [
+        {
+          "path": "member/setting",
+          "style": {
+            "navigationBarTitleText": "设置",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/policy",
+          "style": {
+            "navigationBarTitleText": "会员政策",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberRight",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "会员中心",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/collectionCenter",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "领券中心"
+          }
+        },
+        {
+          "path": "member/memberInfo",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "个人资料",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberListPoint",
+          "style": {
+            "navigationBarTitleText": "积分",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberAccount",
+          "style": {
+            "navigationBarTitleText": "余额",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/couponList",
+          "style": {
+            "onReachBottomDistance": 30,
+            "navigationBarTitleText": "券包",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/couponInfo",
+          "style": {
+            "navigationBarTitleText": "券包详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberAuth",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "实名认证",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/couponHistory",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "历史券包",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/authSucceed",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/myCollection",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "我的收藏",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberAccountInfo",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/memberAccountExpire",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/tradeInfo",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "交易明细",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/travelPreference",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "旅行喜好",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "other/codeText",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "member/travelersList",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationBarTitleText": "常用出行人",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesB",
+      "pages": [
+        {
+          "path": "travel/searchResult",
+          "style": {
+            "onReachBottomDistance": 30,
+            "navigationBarTitleText": "搜索结果",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/destination",
+          "style": {
+            "navigationBarTitleText": "旅行目的地",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/travelDetail",
+          "style": {
+            "navigationStyle": "custom",
+            "navigationBarTitleText": ""
+          }
+        },
+        {
+          "path": "other/question",
+          "style": {
+            "navigationBarTitleText": "常见问题",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "other/questionDetail",
+          "style": {
+            "navigationBarTitleText": "问题详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "other/pay",
+          "style": {
+            "navigationBarTitleText": "支付订单",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "other/xhsPayBridge",
+          "style": {
+            "navigationBarTitleText": "支付中",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/travelList",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/theme",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/confirmOrder",
+          "style": {
+            "navigationBarTitleText": "确认订单",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/travelersInfo",
+          "style": {
+            "navigationBarTitleText": "新增出行人",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/tips",
+          "style": {
+            "navigationBarTitleText": "温馨提示",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/contract",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/paySuccess",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invite/invite",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invite/inviteShare",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "travel/orderDetail",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "exchangeCoupon/exchangeCouponDetail",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "exchangeCoupon/exchangeList",
+          "style": {
+            "navigationBarTitleText": "选择可兑产品",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesC",
+      "pages": [
+        {
+          "path": "order/hotelList",
+          "style": {
+            "onReachBottomDistance": 30,
+            "navigationStyle": "custom",
+            "navigationBarTitleText": "搜索结果"
+          }
+        },
+        {
+          "path": "order/hotel",
+          "style": {
+            "onReachBottomDistance": 30,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/bookInfo",
+          "style": {
+            "onReachBottomDistance": 30,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/orderInfo",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesD",
+      "pages": [
+        {
+          "path": "trip/tripDetail",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/tripList",
+          "style": {
+            "navigationBarTitleText": "全部行程",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/tripHotel",
+          "style": {
+            "navigationBarTitleText": "行程酒店",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/allServices",
+          "style": {
+            "navigationBarTitleText": "全部服务",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/hotelInfo",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/album",
+          "style": {
+            "navigationBarTitleText": "松赞相册",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/albumDetail",
+          "style": {
+            "navigationBarTitleText": "松赞相册",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/hotelAlbumDetail",
+          "style": {
+            "navigationBarTitleText": "松赞相册",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/houseKeep",
+          "style": {
+            "navigationBarTitleText": "管家简历",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/takeInfo",
+          "style": {
+            "navigationBarTitleText": "接送信息",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/moreTrip",
+          "style": {
+            "navigationBarTitleText": "探索更多体验",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "mobileCheckIn/checkIn",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "mobileCheckIn/checkInSucceed",
+          "style": {
+            "navigationBarTitleText": "已办理入住",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "baggage/addBaggage",
+          "style": {
+            "navigationBarTitleText": "行李吊牌",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "baggage/bindBaggage",
+          "style": {
+            "navigationBarTitleText": "关联行李吊牌",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "baggage/historyBaggage",
+          "style": {
+            "navigationBarTitleText": "历史行李牌",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/tripChange",
+          "style": {
+            "navigationBarTitleText": "变更详情",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "trip/tripChangeLetter",
+          "style": {
+            "navigationBarTitleText": "行程变更确认书",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesE",
+      "pages": [
+        {
+          "path": "dailyActivity/dailyActivityDetail",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "dailyActivity/submitOrder",
+          "style": {
+            "navigationBarTitleText": "确认订单",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "dailyActivity/dailyOrderDetail",
+          "style": {
+            "navigationBarTitleText": "订单详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "consultationForm/index",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "consultationForm/submitSucceed",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "consultationForm/consultList",
+          "style": {
+            "navigationBarTitleText": "咨询单",
+            "enablePullDownRefresh": false,
+            "onReachBottomDistance": 30,
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesF",
+      "pages": [
+        {
+          "path": "prize/prizeList",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "prize/receivePrize",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "prize/receiveSuccess",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "address/addressList",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "address/addAddress",
+          "style": {
+            "navigationBarTitleText": "",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invoice/applyInvoice",
+          "style": {
+            "navigationBarTitleText": "申请发票",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invoice/invoiceDetails",
+          "style": {
+            "navigationBarTitleText": "申请发票",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invoice/invoiceInfo",
+          "style": {
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invoice/invoiceInfoList",
+          "style": {
+            "navigationBarTitleText": "常用开票信息",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "invoice/finishSucceed",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pagesG",
+      "pages": [
+        {
+          "path": "cleanup",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "borrowing",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "purchase",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "suggestions",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "suggest-detail",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "confirm-order",
+          "style": {
+            "navigationBarTitleText": "确认订单",
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/list/index",
+          "style": {
+            "navigationBarTitleText": "工单",
+            "transparentTitle": "auto",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/detail/index",
+          "style": {
+            "transparentTitle": "auto",
+            "navigationStyle": "custom",
+            "enablePullDownRefresh": true
+          }
+        }
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/travel/index": {
+      "network": "all",
+      "packages": [
+        "pagesB",
+        "pagesC",
+        "pagesD",
+        "pagesE"
+      ]
+    },
+    "pages/member/memberCenter": {
+      "network": "all",
+      "packages": [
+        "pagesA",
+        "pagesF",
+        "pagesG"
+      ]
+    }
+  },
+  "globalStyle": {
+    // #ifdef H5
+    "navigationStyle": "custom",
+    // #endif
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "handleWebviewPreload": "auto",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#808080",
+    "selectedColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/travel/index",
+        "text": "预订"
+      },
+      {
+        "pagePath": "pages/trip/index",
+        "text": "出发"
+      },
+      {
+        "pagePath": "pages/scenery/scenery",
+        "text": "风物"
+      },
+      {
+        "pagePath": "pages/member/memberCenter",
+        "text": "我的"
+      }
+    ]
+  }
 }

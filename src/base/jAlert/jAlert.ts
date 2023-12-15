@@ -31,3 +31,18 @@ export function jAlert5(msg: string, successFn: Function, failFn?: Function, con
 		}
 	})
 }
+export function jAlert12(msg:string,cancelText:string,confirmText:string,successFn: Function, failFn?: Function, content?: string) {
+	uni.showModal({
+		title: msg,
+		content: content || '',
+		cancelText:cancelText,
+		confirmText:confirmText,
+		success: function(sm) {
+			if (sm.confirm) {
+				successFn && successFn()
+			} else if (sm.cancel) {
+				failFn && failFn()
+			}
+		}
+	})
+}

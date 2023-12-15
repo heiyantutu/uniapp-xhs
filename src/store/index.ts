@@ -32,6 +32,7 @@ export const mainStore = defineStore('main', {
         name: "231",
         ok: 2222
       },
+	  addressInfo:{},
       config: getStorage("config"),
     }
   },
@@ -46,6 +47,10 @@ export const mainStore = defineStore('main', {
    * 注意: 里面的函数不能定义成箭头函数(函数体中会用到this)
    */
   actions: {
-
+	getEditAddress(obj){
+		console.log(obj)
+		this.addressInfo = {...obj};
+		console.log(this.addressInfo)
+	}
   }
 })

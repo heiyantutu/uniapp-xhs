@@ -33,12 +33,11 @@ export default {
     this.initSelect();
   },
   methods: {
-
     // 初始化地址选项
     initSelect() {
       this.updateSourceDate(); // 更新源数据
       this.updateAddressDate(); // 更新结果数据
-      this.$forceUpdate(); // 触发双向绑定
+      // this.$forceUpdate(); // 触发双向绑定
     },
     // 地址控件改变控件
     columnchange(d) {
@@ -103,10 +102,10 @@ export default {
     /**
      * 点击确定
      * */
-    bindPickerChange(e) {
-      this.$emit("change", {
-        index: this.value,
+    bindPickerChange() {
+      this.$emit("changeCity", {
         data: selectVal,
+        index: this.value,
       });
       return this;
     },

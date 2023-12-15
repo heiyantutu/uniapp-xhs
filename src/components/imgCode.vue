@@ -30,6 +30,7 @@ export default {
       dialogState: false,
       path: "",
       sessionId: "",
+      imgVerifyCode:""
     };
   },
   props: ["ysmState", "phone", "isTap", "isGetVerify", "timeOut"],
@@ -56,12 +57,13 @@ export default {
           ysmState: false,
           verifyId: data.retVal,
         });
+        this.imgVerifyCode = "";
       } else {
-        this.$emit("change-time", {
+        /* this.$emit("change-time", {
           ysmState: true,
           isTap: false,
           verifyId: "",
-        });
+        }); */
         _this.getImgVerify();
 
         jAlert3(data.msg);
@@ -84,6 +86,7 @@ export default {
     },
   },
   mounted() {
+    this.imgVerifyCode = "";
     this.getImgVerify();
   },
   created() {
@@ -93,6 +96,8 @@ export default {
 </script>
 <style lang="less" scoped>
 @import url("~@/styles/skin.less");
+@import (reference) url("~@/styles/mixin.less");
+
 .imgVerifyCodeMask {
   width: 100%;
   height: 100%;
@@ -144,6 +149,7 @@ export default {
     height: 40px;
     width: 100px;
     z-index: 99;
+    object-fit: contain;
   }
 }
 .dialogBody.grey {
@@ -164,12 +170,12 @@ export default {
 .dialogBody .btn {
   box-shadow: 0 0px 0px 0;
   transition: all 0.5s;
-  background: #000000;
   width: 100%;
   height: 44px;
   line-height: 44px;
   display: inline-block;
   text-align: center;
   color: #fff;
+  .baseBtn();
 }
 </style>

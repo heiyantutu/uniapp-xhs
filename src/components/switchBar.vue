@@ -1,7 +1,8 @@
 <template>
-  <view class="ui_switchBar">
+  <view class="ui_switchBar" :style="`padding: 0px ${padding}px`">
     <view class="switchItem" v-for="(switchItem,switchItemIndex) in switchList" :key="switchItemIndex"
-      :class="{ active:switchItem.active }" @click="changeIndex(switchItemIndex)" :style="{ color:color }">
+      :class="{ active:switchItem.active,more:switchList.length>5 }" @click="changeIndex(switchItemIndex)"
+      :style="{ color:color }">
       <div class="switchItemName">{{switchItem.name}}</div>
     </view>
   </view>
@@ -25,6 +26,12 @@ export default defineComponent({
         return "";
       },
     },
+    padding: {
+      type: Number,
+      default: () => {
+        return 0;
+      },
+    },
   },
   emits: ["changeIndex"],
   setup(props, { emit }) {
@@ -44,6 +51,9 @@ export default defineComponent({
   height: 44px;
   display: flex;
   overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .switchItem {
     flex: 1;
     position: relative;
@@ -55,6 +65,10 @@ export default defineComponent({
     flex: 1 0 auto;
     white-space: nowrap;
     min-width: calc(100% / 4);
+    &.more {
+      min-width: initial;
+      margin-right: 16px;
+    }
     .switchItemName {
       height: 44px;
       line-height: 44px;
@@ -65,12 +79,12 @@ export default defineComponent({
         position: relative;
         &::after {
           content: "";
-          width: 36px;
+          width: 32px;
           height: 2px;
           border: 2px;
           background: @active-color;
           position: absolute;
-          left: calc(~"(100% - 36px) / 2");
+          left: calc(~"(100% - 32px) / 2");
           bottom: 0;
         }
       }

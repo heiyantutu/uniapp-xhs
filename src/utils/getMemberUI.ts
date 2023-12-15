@@ -1,20 +1,39 @@
 const memberUIMap = {
-  "level1": {
-    linearColor: "linear-gradient(106deg, #2A4B7C 0%, #8AD6E7 100%)",
+  "GESANG": {
     memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level1.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang.png"
   },
-  "level2": {
-    linearColor: "linear-gradient(45deg, #FFC107, #fd8d3c)",
+  "LVRONGHAO": {
     memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level2.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang1.png"
+  },
+  "LIAN": {
+    memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level3.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang2.png"
+  },
+  "JG": {
+    memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level4.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang3.png"
+  },
+  "LRH": {
+    memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level2.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang1.png"
+  },
+  "LIAN-8": {
+    memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level3.png",
+    defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang2.png"
   },
 }
 
 const defaultMemberItem = {
-  linearColor: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level1.png",
-  memberCenterBg: "",
+  memberCenterBg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/level0.png",
+  defaultHeadImg: "https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/touxiang.png"
 }
 
-const getMemberUI = (query: string) => {
+const getMemberUI = (query: any) => {
+  if (query && query.indexOf("JG") == 0) {
+    query = "JG";
+  }
   if (query in memberUIMap) {
     return memberUIMap[query as keyof typeof memberUIMap];
   } else {

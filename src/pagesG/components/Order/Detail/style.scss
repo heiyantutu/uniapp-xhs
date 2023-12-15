@@ -1,0 +1,78 @@
+.detail {
+  background: #f8f8f8;
+  height: 100vh;
+}
+.key-value {
+  margin-bottom: 16px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+.bottom-layer {
+  position: absolute;
+  // #ifdef MP
+  height: 200px;
+  // #endif
+  // #ifdef H5
+  height: 112px;
+  // #endif
+  width: 100vw;
+  background-image: url(https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/btnBlack.png);
+  background-repeat: repeat;
+  background-size: 40px 37.5px;
+  background-color: #000;
+  z-index: 1;
+}
+
+.top-layer {
+  position: relative;
+  z-index: 2;
+
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: 0 16px;
+}
+
+.header {
+  color: #fff;
+  margin-top: 16px;
+}
+
+.desc {
+  opacity: 0.8;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.sta {
+  font-size: 20px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.buttons {
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+}
+
+.order-no {
+  display: flex;
+  align-items: center;
+}
+
+.copy-img {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+}

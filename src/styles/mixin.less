@@ -9,6 +9,17 @@
   text-align: center;
 }
 
+.w-baseBtn {
+  background-color: #ffffff;
+  background-image: url("https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/btnWhite.png");
+  background-repeat: repeat;
+  text-align: center;
+  background-size: 40px 37.5px;
+  border-radius: 4px;
+  color: #000;
+  text-align: center;
+}
+
 .line-clamp(@line) {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -35,5 +46,21 @@
     bottom: -30px;
     left: -30px;
     z-index: 9;
+  }
+}
+
+.halfPixel(@radius:5px,@borderColor:#ccc) {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    border: 1px solid @borderColor;
+    border-radius: @radius*2;
+    transform-origin: 0 0;
+    transform: scale(0.5);
   }
 }

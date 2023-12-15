@@ -101,10 +101,10 @@
 			<l-painter-view css="margin-left: 40rpx; margin-top: 30rpx; padding: 32rpx; box-sizing: border-box; background: #ffffff; border-radius: 16rpx; width: 670rpx; box-shadow: 0 20rpx 58rpx rgba(0,0,0,.15)">
 				<l-painter-image src="https://m.360buyimg.com/babel/jfs/t1/196317/32/13733/288158/60f4ea39E6fb378ed/d69205b1a8ed3c97.jpg"  css="object-fit: cover; object-position: 50% 50%; width: 606rpx; height: 606rpx;"/>
 				<l-painter-view css="margin-top: 32rpx; color: #FF0000; font-weight: bold; font-size: 28rpx; line-height: 1em;">
-					<l-painter-text text="￥" css="vertical-align: bottom"/>
+					<l-painter-text text="¥" css="vertical-align: bottom"/>
 					<l-painter-text text="39" css="vertical-align: bottom; font-size: 58rpx"/>
 					<l-painter-text text=".39" css="vertical-align: bottom"/>
-					<l-painter-text text="￥59.99" css="vertical-align: bottom; padding-left: 10rpx; font-weight: normal; text-decoration: line-through; color: #999999"/>
+					<l-painter-text text="¥59.99" css="vertical-align: bottom; padding-left: 10rpx; font-weight: normal; text-decoration: line-through; color: #999999"/>
 				</l-painter-view>
 				<l-painter-view css="margin-top: 32rpx; font-size: 26rpx; color: #8c5400">
 					<!-- <l-painter-text text="自营" css="color: #212121; background: #ffb400;"/> -->

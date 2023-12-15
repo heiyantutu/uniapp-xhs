@@ -2,31 +2,29 @@
 	<view class="ui_productGroup">
 		<div class="product-group">
 			<template v-for="(item,i) in datas" :key="i">
-				<div class="product-box" @click="toPage(item)" v-if="i<=number">
+				<div class="product-box" @click="toPage(item)" v-if="!number||i<number">
 					<div class="product-swiper">
 						<div class="product-labs">
-							<div class="product-lab" v-if="item.categoryDesc">
-								{{item.categoryDesc}}
+							<div class="product-lab" :class="item.categorySub" v-if="item.categorySubDesc">
+								{{item.categorySubDesc}}
 							</div>
 
-							<div class="product-lab2" v-if="item.tag">
+							<div class="product-lab2" v-if="item.marketingTag"> 
 								<i class="icon-a-12_xinpin iconfont"></i>
-								{{item.tag}}
+								{{item.marketingTag}}
 							</div>
 						</div>
 
-						<img class="product-img"
-							:src="item.urls[0].url+'?imageView2/1/w/343/h/258&x-oss-process=image/resize,m_fill,w_343,h_258'"
-							v-if="item.urls&&item.urls.length>0">
+						<img class="product-img" :src="item.urls[0].url+'?imageView2/1/w/686/h/516&x-oss-process=image/resize,m_fill,w_686,h_516'"	v-if="item.urls&&item.urls.length>0">
+						<img class="product-img" v-else-if="item.logo" :src="item.logo+'?imageView2/1/w/686/h/516&x-oss-process=image/resize,m_fill,w_686,h_516'">
 					</div>
 					<div class="product-info">
 						<div class="product-name">
 							{{item.title}}
 						</div>
-						<div class="product-sub-tl">
-							<div class="three-tl">{{item.sketch}}</div>
-							<div class="three-tl" v-if="item.productNum">{{item.productNum}}人</div>
-							<div class="three-tl" v-if="item.productNum">{{item.productNum}}人</div>
+						<div class="product-sub-tl" v-if="item.descriptShort||item.productNum||item.carTypeDesc">
+							<div class="three-tl">{{item.descriptShort}}<template v-if="item.descriptShort&&item.productNum">丨</template ><template v-if="item.productNum">{{item.productNum}}人</template><template v-if="(item.productNum ||item.descriptShort)&&item.carTypeDesc">丨</template ><template v-if="item.carTypeDesc">{{item.carTypeDesc}}</template></div>
+			
 						</div>
 						<div class="desc" v-if="item.subtitle">
 							{{item.subtitle}}
@@ -39,8 +37,8 @@
 
 						</div>
 						<div class="product-price">
-							￥{{item.startingPrice}}
-							<div class="unit"> /起</div>
+							¥{{item.startingPrice}}
+							<div class="unit"> /<template v-if="item.productType == 'shop'">份</template><template v-if="item.priceModelDesc">{{item.priceModelDesc}}</template><template v-if="item.skuFlag||item.productType != 'shop'">起</template></div>
 						</div>
 					</div>
 				</div>
@@ -54,7 +52,7 @@
 
 <script lang="ts">
 	import { defineComponent, computed } from "vue";
-
+	import UmengSDK from "@/utils/umengAdaptor.js";
 	export default defineComponent({
 		name: "productGroup",
 		props: {
@@ -78,9 +76,24 @@
 				return props.datas;
 			});
 			const toPage = (item : any) => {
-				uni.navigateTo({
-					url: `/pagesB/travel/travelDetail?travelGroupCode=${item.travelGroupCode}`
+				UmengSDK.sendEvent("bp_product_card_clk", {
+					page_name: "book_pg",
+					card_name: item.title,
+					card_id: item.travelType||item.id,
+					tab_name: item.categorySubDesc,
+					second_tag: item.series,
+					price:item.startingPrice
 				});
+				if(item.productType == 'shop'){
+					uni.navigateTo({
+						url: `/pagesB/exchangeCoupon/exchangeCouponDetail?id=${item.id}`
+					});
+				}else{
+					uni.navigateTo({
+						url: `/pagesB/travel/travelDetail?travelType=${item.travelType}`
+					});
+				}
+				
 			};
 			return {
 				toPage,
@@ -128,16 +141,27 @@
 						position: absolute;
 						left: 8px;
 						top: 8px;
-
+						
 						.product-lab {
 
 							padding: 4px;
-							background: rgba(0, 0, 0, 0.9);
+							background: rgba(0, 67, 85, 0.9);
+							color: #fff;
 							border-radius: 4px;
-							color: #FFDF8C;
 							font-size: 12px;
 							line-height: 1;
 							margin-right: 3px;
+							&.ButlerCustomized{
+								background: rgba(0, 0, 0, 0.9);
+								color: #FFDF8C;
+							}
+							
+							&.FreeTravel{
+								background:rgba(51, 103, 53, 0.9);
+							}
+							&.DestPackage{
+								background:rgba(219, 137, 0, 0.9);
+							}
 						}
 
 						.product-lab2 {
@@ -160,29 +184,29 @@
 				}
 
 				.product-info {
-					padding: 12px;
+					padding: 8px 12px 12px;
 
 					.product-name {
 						font-family: 'PingFang SC';
 						font-weight: bold;
 						font-size: 16px;
-						line-height: 1;
-						height: 1;
 						display: -webkit-box;
 						-webkit-box-orient: vertical;
 						-webkit-line-clamp: 1;
 						overflow: hidden;
 						color: @tl-black;
+						word-break: break-all;
+						line-height: 24px;
 					}
 
 					.product-sub-tl {
-						margin-top: 8px;
+						margin-top: 4px;
 						color: @tl-black;
 						font-size: 12px;
 						line-height: 18px;
 						display: -webkit-box;
 						-webkit-box-orient: vertical;
-						-webkit-line-clamp: 1;
+						-webkit-line-clamp: 2;
 						overflow: hidden;
 
 					}
@@ -192,6 +216,10 @@
 						font-size: 12px;
 						line-height: 18px;
 						color: @text-color;
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 2;
+						overflow: hidden;
 					}
 
 					.product-info-labs {
@@ -216,7 +244,7 @@
 						margin-top: 20px;
 						font-family: 'Montserrat';
 						color: #000000;
-						font-weight: bold;
+						font-weight: 600;
 						font-size: 18px;
 						line-height: 1;
 						height: 1;
@@ -296,7 +324,7 @@
 							margin-top: 20px;
 							font-family: 'Montserrat';
 							color: @tl-black;
-							font-weight: bold;
+							font-weight: 600;
 							font-size: 18px;
 							line-height: 1;
 							height: 1;

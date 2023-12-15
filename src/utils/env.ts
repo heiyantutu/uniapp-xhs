@@ -1,5 +1,5 @@
 
 	const env = {
-		NODE_ENV: "songzan",
+		NODE_ENV: "songzanH5",
 	}
 	export default env

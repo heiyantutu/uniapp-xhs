@@ -3,24 +3,22 @@
 		<div class="destination">
 			<div class="search-top">
 				<div class="search">
-					<search-input class="search-input" @submit="search" v-model="searchVal"
-						placeholder="关键词/位置/景点/酒店名"></search-input>
+					<search-input class="search-input"  v-model="searchVal" 
+						placeholder="关键词/城市名"></search-input>
 
 				</div>
-				<div class="search-history" v-if="!searchVal">
+				<div class="search-history" v-if="!searchVal&&mySearchGroup.length>0&&isCollapse">
 					<div class="tl">
 						搜索历史
 						<i class="iconfont icon-a-16_shanchulishijilu" @click="delSearch()"></i>
 					</div>
-					<collapse defaultHeight="50px">
+					<collapse defaultHeight="50px" ref="collapseBox">
 						<template v-slot:content>
 							<div class="search-list">
 								<div class="search-item" v-for="(item,i) in mySearchGroup" :key="i"
-									@click="chooseHis(item)">
+									@click="chooseHis(item)"> 
 									{{item}}
 								</div>
-
-
 							</div>
 						</template>
 					</collapse>
@@ -61,9 +59,10 @@
 </template>
 
 <script lang="ts">
-	import { defineComponent, computed, ref, onMounted, reactive } from "vue";
+	import { defineComponent, computed, ref, onMounted, reactive, toRef, toRefs, nextTick } from "vue";
 	import searchInput from "@/components/searchInput.vue";
 	import collapse from "@/components/collapse.vue";
+	import UmengSDK from "@/utils/umengAdaptor.js";
 	import { getStorage, removeStorage, setStorage } from "@/utils/wxuser";
 	import api from "@/utils/api";
 	import { jAlert3 } from "@/base/jAlert/jAlert";
@@ -101,7 +100,33 @@
 			let destinations : any = ref({})
 			let mySearchGroup = ref([])
 			let searchVal = ref('')
-			const search = (item : object) => {
+			let isCollapse = ref(false)
+			const updataHis = ()=>{
+				isCollapse.value = true
+			}
+			const search = (item :any) => {
+				console.log(item)
+				if(!item||!item.dictionaryCode){
+					for(var i in destinations.value){
+						var destination = destinations.value[i]
+						destination.forEach((obj:any)=>{
+							if(obj.dictionaryDesc==searchVal.value){
+								item = destination
+							}
+						})
+					}
+					
+					if(!item||!item.dictionaryCode){
+						item = {
+							dictionaryDesc:searchVal.value
+						}
+					}
+				}
+				UmengSDK.sendEvent("sp_intiate_search", {
+					page_name: "search_pg",
+					key_word:searchVal.value,
+					is_preset:'F',
+				});
 				if (searchVal.value) {
 					mySearchGroup.value.splice(0, 0, searchVal.value)
 					mySearchGroup.value = [...new Set(mySearchGroup.value)];
@@ -109,12 +134,19 @@
 					setStorage('myMallSearch', mySearch.value);
 					searchVal.value = ''
 				}
-
+				isCollapse.value = false
+				setStorage('searchHis', item);
 				context.emit("search", item);
 
 			}
 			const chooseHis = (item : string) => {
+				
 				searchVal.value = item
+				UmengSDK.sendEvent("sp_intiate_search", {
+					page_name: "search_pg",
+					key_word:searchVal.value,
+					is_preset:'T',
+				});
 			}
 			const getMysearch = () => {
 				mySearch.value = getStorage('myMallSearch');
@@ -139,25 +171,50 @@
 						) {
 							destList.value = res.retVal
 							if (destList.value.length > 0) {
+								
 								let selectDest : any = destList.value[0]
 								destList.value.forEach((item : any) => {
 									if (!destinations.value[item.provinceDesc]) {
-										destinations.value[item.provinceDesc] = []
+										destinations.value[item.provinceDesc] = [];
 									}
-
+									if(!props.dictionaryCode&&getStorage('searchHis')){
+										if(getStorage('searchHis').dictionaryCode == item.dictionaryCode){
+											selectDest = item
+										}
+									}
 									if (props.dictionaryCode && props.dictionaryCode == item.dictionaryCode) {
 										selectDest = item
 									}
-									destinations.value[item.provinceDesc].push(item)
-
+									destinations.value[item.provinceDesc].push(item);
 								})
+								Object.entries(destinations.value).forEach(([key, value]) => {
+									let cities = destinations.value[key];
+									let provinceDesc = cities[0].provinceDesc;
+									let dictionaryCodeList: any = [];
+									let cityCodeList: any = [];
+									cities.forEach((n: any) => {
+										if (n.dictionaryCode) {
+											dictionaryCodeList.push(n.dictionaryCode);
+										}
+										if (n.cityCode) {
+											cityCodeList.push(n.cityCode);
+										}
+									})
+									let allProvince = {
+										dictionaryDesc: `全${provinceDesc}`,
+										dictionaryCode: dictionaryCodeList.join(","),
+										cityDesc: `全${provinceDesc}`,
+										cityCode: cityCodeList.join(","),
+									}
+									destinations.value[key].unshift(allProvince);
+								});
+								console.log(selectDest)
+								console.log(1111)
 								if (props.isAutoChooseCity) {
 									context.emit("search", selectDest);
 								}
 							}
-
-
-
+							
 						}
 					});
 			}
@@ -185,6 +242,7 @@
 				jAlert3('删除成功')
 			}
 			onMounted(() => {
+			
 				getMysearch()
 				listTravelDictionary()
 			})
@@ -199,7 +257,9 @@
 				destList,
 				resultList,
 				destinations,
-				chooseHis
+				chooseHis,
+				updataHis,
+				isCollapse
 			};
 		}
 	});
@@ -210,16 +270,18 @@
 	@import url("~@/styles/mixin.less");
 
 	.ui_destinationBox {
+		padding-bottom:80px;
+		padding-bottom: calc(80px + constant(safe-area-inset-bottom));
+		padding-bottom: calc(80px + env(safe-area-inset-bottom));
 		.destination {
 			position: relative;
-			padding-bottom: 40px;
-			height: calc(100vh - 160px);
-			overflow-y: auto;
-			padding-bottom: 40px;
+			
+			height: 80vh;
+			
 
 			.search-top {
 				background-color: #f8f8f8;
-				padding-bottom: 5px;
+				// padding-bottom: 5px;
 				position: sticky;
 				top: 0;
 				z-index: 2;
@@ -248,7 +310,10 @@
 						.search-item {
 							margin-top: 10px;
 							display: inline-block;
-							padding: 8px;
+							padding: 0 12px;
+							height: 34px;
+							box-sizing: border-box;
+							line-height: 32px;
 							font-size: 12px;
 							color: #000000;
 							border: 1px solid #ddd;
@@ -284,10 +349,13 @@
 			.city-list {
 
 				padding: 17px 16px 0;
-
-
-
-
+				&:last-child{
+					padding-bottom: 20px;
+				}
+				.tl{
+					font-size: 14px;
+					line-height: 1;
+				}
 
 				.citys {
 					padding-top: 4px;
@@ -295,20 +363,25 @@
 					flex-wrap: wrap;
 
 					.city {
-						width: calc(33.3% - 10px);
+						width: calc(33.3% - 6px);
 						border: 1px solid #ddd;
-						height: 48px;
+						height: 46px;
 						margin-top: 12px;
 						display: flex;
-						margin-right: 10px;
+						margin-right: 8px;
 						align-items: center;
 						justify-content: center;
 						border-radius: 4px;
-
+						font-size: 14px;
+						line-height: 1; 
+						font-family: PingFang SC;
+						&:nth-child(3n){
+							margin-right: 0;
+						}
 						.popular-icon {
 							margin-left: 4px;
-							width: 12px;
-							height: 12px;
+							width: 11px;
+							height: 13px;
 						}
 
 					}
@@ -344,7 +417,7 @@
 				}
 
 				.result {
-					padding-top: 16px;
+					padding-top: 14px;
 					display: flex;
 					align-items: center;
 

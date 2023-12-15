@@ -1,6 +1,6 @@
 <template>
   <div class="ui_alert" v-if="tips" :class="type">
-    <i class="iconfont icon icon-a-16_tishi_hongse"></i>
+    <i class="iconfont icon icon-a-16_jinggao_hong"></i>
     <p class="tips">{{tips}}</p>
   </div>
 </template>

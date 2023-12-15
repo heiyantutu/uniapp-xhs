@@ -1,6 +1,6 @@
 import { getStorage } from "@/utils/wxuser";
 
-export function makeOrder(obj:any) {
+export function makeOrder(obj: any) {
   /*var guestsList = [{ name: obj.guests}];
   guestsList.concat(obj.checkInGuests);*/
   var bookOrderInfoRQ = Object.assign(
@@ -81,6 +81,8 @@ export function makeOrder(obj:any) {
     couponBatchSaleParam: obj.couponBatchSaleParam || '',
     products: obj.products || [],
     isBuyOnBehalf: obj.isBuyOnBehalf || "",
+    sourceActivityId: obj.sourceActivityId || "",
+    sourceActivityName: obj.sourceActivityName || "",
   };
   if (!sendData.productChannel) {
     delete sendData['categorySub'];

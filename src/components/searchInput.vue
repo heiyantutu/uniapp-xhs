@@ -1,7 +1,7 @@
 <template>
   <div class="ui_searchInput">
-    <i class="icon iconfont icon-a-16_sousuo_hui"></i>
-    <input :placeholder=placeholder @input=handelInput :value="modelValue" confirm-type="done" @confirm=confirmInput />
+    <i class="icon iconfont icon-a-16_sousuo_hui" :style="searchIconStyle" :class="{'active':isFocus}"></i>
+    <input :placeholder=placeholder @input=handelInput :placeholder-style="searchIconStyle" :value="modelValue" confirm-type="done" @confirm=confirmInput @click="clickInput" placeholder-style="color:#ccc;" :focus="isFocus" @blur="setFocus(false)" @focus="setFocus(true)"/>
     <div class="clear" v-if="modelValue.length>0" @click="clearInput">
       <i class="icon iconfont icon-a-20_guanbi"></i>
     </div>
@@ -20,6 +20,12 @@ export default defineComponent({
         return "";
       },
     },
+    searchIconStyle:{
+      type: String,
+      default: () => {
+        return "";
+      },
+    },
     placeholder: {
       type: String,
       default: () => {
@@ -29,8 +35,10 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, context) {
+    let isFocus = ref(false);
     function handelInput(e) {
       context.emit("update:modelValue", e.detail.value);
+      context.emit("input");
     }
     function clearInput() {
       context.emit("update:modelValue", "");
@@ -39,10 +47,19 @@ export default defineComponent({
     function confirmInput(e) {
       context.emit("submit", e.detail.value);
     }
+    function clickInput(e) {
+      context.emit("click", e);
+    }
+    function setFocus(sta){
+      isFocus.value = sta;
+    }
     return {
       handelInput,
       clearInput,
       confirmInput,
+      clickInput,
+      isFocus,
+      setFocus,
     };
   },
 });
@@ -57,11 +74,16 @@ export default defineComponent({
   height: 32px;
   .icon-a-16_sousuo_hui {
     margin-left: 12px;
-    margin-right: 10px;
+    margin-right: 8px;
+    color:#CCC;
+    &.active{
+      color:#000;
+    }
   }
   input {
     flex: 1;
     font-size: 14px;
+    color:#000;
   }
   .clear {
     background: #cccccc;

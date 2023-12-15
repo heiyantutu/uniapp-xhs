@@ -1,10 +1,10 @@
 const config = {
-	"hotelGroupCode": "GCBZG",
-	"hotelGroupId": 2,
+	"hotelGroupCode": "SONGTSAM-CS",
+	"hotelGroupId": 1,
 	"hotelCode": 0,
 	"hotelId": 0,
 	"appid": "wx4e7176eb9d8c5ea4",
-	"hotelGroupName": "绿云大酒店",
+	"hotelGroupName": "松赞",
 	"componentAppid": "",
 	"isOpenHotelGroupBook": "T",
 	"isOpenDistribution": "T",
@@ -13,6 +13,9 @@ const config = {
 	"isOpenBook": "T",
 	"equipment": "desktop",
 	"isOpenHotelListBigPictureMode": "T",
-	"baseUrlmall": "https://apitest.wx.gcihotel.net"
+	"baseUrlmall": "https://test-xcx.songtsam.com/guardian",
+	"domain": "https://wap.songtsam.com",
+	"appkey": "81756736",
+	"appsecret": "DB6424FE510A11EEBFC917C3812AE482"
 };
   export default config;

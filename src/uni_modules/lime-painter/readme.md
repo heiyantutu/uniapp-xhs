@@ -465,14 +465,14 @@ access-control-allow-origin:*
     <l-painter-view
       css="margin-top: 32rpx; color: #FF0000; font-weight: bold; font-size: 28rpx; line-height: 1em;"
     >
-      <l-painter-text text="￥" css="vertical-align: bottom" />
+      <l-painter-text text="¥" css="vertical-align: bottom" />
       <l-painter-text
         text="39"
         css="vertical-align: bottom; font-size: 58rpx"
       />
       <l-painter-text text=".39" css="vertical-align: bottom" />
       <l-painter-text
-        text="￥59.99"
+        text="¥59.99"
         css="vertical-align: bottom; padding-left: 10rpx; font-weight: normal; text-decoration: line-through; color: #999999"
       />
     </l-painter-view>
@@ -610,7 +610,7 @@ data() {
 		                        lineHeight: "1em"
 		                    },
 		                    views: [{
-								text: "￥",
+								text: "¥",
 								type: "text",
 		                        css: {
 		                            verticalAlign: "bottom"
@@ -629,7 +629,7 @@ data() {
 		                            verticalAlign: "bottom"
 		                        },
 		                    }, {
-								text: "￥59.99",
+								text: "¥59.99",
 								type: "text",
 		                        css: {
 		                            verticalAlign: "bottom",

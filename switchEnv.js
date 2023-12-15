@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 if (process.argv.length <= 2) {
-  console.log('请输入输入指定的环境,具体可以查看env.js')
+  console.log('请输入输入指定的环境,具体可以查看env.ts')
   return
 }
 
@@ -15,6 +15,8 @@ function resolve(dir) {
 let envMode = process.argv[2];
 let envPath = "./src/jsonEnv/" + envMode + ".json";
 envPath = resolve(envPath);
+
+let platform = process.argv[3] || "mp-weixin";
 
 fs.exists(envPath, function (exists) {
   if (exists) {
@@ -31,7 +33,7 @@ function replaceJson(envPath, envMode) {
   let manifestPath = resolve('./src/manifest.json');
   let manifest = fs.readFileSync(manifestPath);
   let manifestJSON = JSON.parse(manifest);
-  manifestJSON['mp-weixin']['appid'] = appid;
+  manifestJSON[platform]['appid'] = appid;
   let newManifestJSON = JSON.stringify(manifestJSON, "", "\t");
   let newextJSON = JSON.stringify(extJSON, "", "\t");
   let config = extJSON.ext;
@@ -43,6 +45,7 @@ function replaceJson(envPath, envMode) {
   fs.writeFileSync('./src/utils/config.ts', configText);
   writeEnv(envMode);
   console.log('已经成功替换为' + envMode + "环境")
+  console.log('ext\n', JSON.stringify(extJSON, null, 2));
   process.exit(0)
 }
 

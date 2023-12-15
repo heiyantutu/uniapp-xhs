@@ -1,0 +1,15 @@
+:deep(.safe-bottom) {
+  .bottomDialogBox {
+    .bottomDialogMask,
+    .bottomDialog {
+      top: auto !important;
+      bottom: calc(constant(safe-area-inset-bottom) + 73px) !important;
+      bottom: calc(env(safe-area-inset-bottom) + 73px) !important;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .dialogWarp {
+    flex: 1;
+  }
+}

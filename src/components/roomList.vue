@@ -4,14 +4,14 @@
       <image
         :src="room.gcRoomExtra.logo ? room.gcRoomExtra.logo : 'https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/hotel/images/noPic.png'"
         alt="" mode='aspectFill' class="logo"
-        @click="preview(room.gcRoomExtra.logo ? room.gcRoomExtra.logo : 'https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/hotel/images/noPic.png')" />
+        @click="preview(room.gcRoomExtra.logo ? room.gcRoomExtra.logo : 'https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/hotel/images/noPic.png',room.gcRoomExtra.pictures)" />
       <div class="roomTypeBox">
         <div class="roomTypeTitle">
           <p class="roomName">{{ room.roomDescript }}</p>
           <p class="aboutDes">
+            <span class="aboutItem">{{ room.gcRoomExtra.bedType }}床</span>
             <span class="aboutItem">{{ room.gcRoomExtra.squareMeter }}</span>
-            <span class="aboutItem">{{ room.gcRoomExtra.bedType }}</span>
-            <span class="aboutItem">{{ room.gcRoomExtra.floor }}</span>
+            <!-- <span class="aboutItem">{{ room.gcRoomExtra.floor }}</span> -->
           </p>
         </div>
         <div class="theRoom" v-for='(roomType, roomTypeIndex) in room.gcProductBases' :key='roomTypeIndex'
@@ -19,11 +19,11 @@
           <div class="leftPart" @click.stop="setCurrentRoom(roomType,room)">
             <p class="roomTitleDesc"><i class="icon iconfont icon-a-12_fangjian"></i>{{ roomType.showName }}</p>
             <div class="priceItem">
-              <span class="money">￥{{roomType.pbMinPriceWithPromotion}}</span>/晚
+              <span class="money">¥{{roomType.pbMinPriceWithPromotion}}</span>/晚
             </div>
           </div>
           <div class="rightPart">
-            <div class="goBtn">
+            <div class="goBtn" :class="{'disabled':roomType.minSaleNum <= 0||roomType.bookAble!=='T'}">
               <template v-if="roomType.bookAble == 'T'">
                 <template v-if="roomType.minSaleNum <= 0">
                   <div class="ydBtn ydBtn2">
@@ -79,10 +79,11 @@
           <p class="packageTopTitle">推荐套餐</p>
           <div class="theRoom" v-for="(packageItem,packageItemIndex) in room.travelList" :key="packageItemIndex">
             <div class="leftPart" @click.stop="setCurrentPack(room.gcProductBases[0],room,packageItem)">
-              <p class="roomTitleDesc"><i class="icon iconfont icon-a-12_jiudian_hei"></i>{{packageItem.title}}</p>
+              <p class="roomTitleDesc"><i class="icon iconfont icon-a-12_jiudiantaocan_hui"></i>{{packageItem.title}}
+              </p>
               <div class="priceItem">
-                <p><span class="money">￥{{packageItem.price}}</span>/套</p>
-                <p class="money2">{{packageItem.price2}}</p>
+                <p><span class="money">¥{{packageItem.price}}</span>/{{packageItem.unit}}</p>
+                <p class="money2" v-if="packageItem.price2">{{packageItem.price2}}</p>
               </div>
             </div>
             <div class="rightPart">
@@ -141,12 +142,16 @@ export default defineComponent({
       },
     },
   },
-  emits: ["showCurrentRoom", "goBook", "showTravelAll","goPackItem"],
+  emits: ["showCurrentRoom", "goBook", "showTravelAll", "goPackItem"],
   setup(props, { emit }) {
-    const preview = (url: string) => {
+    const preview = (current: string, urls: string) => {
+      let imgUrl = [current];
+      if (urls) {
+        imgUrl = imgUrl.concat(urls.split(";"));
+      }
       previewImage({
-        current: url,
-        urls: [url],
+        current: current,
+        urls: imgUrl,
       });
     };
     const goBookInfo = (roomType: AnyObject, room: AnyObject) => {
@@ -183,9 +188,9 @@ export default defineComponent({
         type: "pack",
       });
     };
-    const goPackItem = (item:AnyObject)=>{
+    const goPackItem = (item: AnyObject) => {
       emit("goPackItem", item);
-    }
+    };
     return {
       goBookInfo,
       goLogin,
@@ -235,7 +240,7 @@ export default defineComponent({
     }
 
     .roomTypeBox {
-      padding: 10px 12px;
+      padding: 12px 12px;
 
       .roomTypeTitle {
         margin-bottom: 5px;
@@ -251,6 +256,9 @@ export default defineComponent({
           font-size: 12px;
           color: #808080;
           margin-bottom: 5px;
+          .aboutItem {
+            margin-right: 3px;
+          }
         }
       }
 
@@ -262,7 +270,7 @@ export default defineComponent({
         height: 64px;
 
         &:last-of-type {
-          border-bottom: 0px;
+          margin-bottom: 0px;
         }
 
         .leftPart {
@@ -273,8 +281,9 @@ export default defineComponent({
             margin-bottom: 8px;
             display: flex;
             align-items: center;
+            line-height: 12px;
             .iconfont {
-              margin-left: 3px;
+              margin-right: 3px;
             }
           }
 
@@ -285,16 +294,18 @@ export default defineComponent({
             .money {
               font-size: 18px;
               color: #000000;
-              font-weight: bold;
+              font-weight: 600;
+              font-family: Montserrat;
             }
             .money2 {
               color: #000;
               font-size: 10px;
-              padding: 2px;
+              padding: 4px;
               border-radius: 4px;
               background: rgba(219, 137, 0, 0.16);
               display: inline-block;
-              margin-top:2px;
+              margin-top: 4px;
+              font-family: Montserrat;
             }
           }
         }
@@ -304,6 +315,10 @@ export default defineComponent({
             .baseBtn();
             padding: 10px 16px;
             font-size: 14px;
+            &.disabled{
+              background:#EEE;
+              color: #CCC;
+            }
           }
         }
       }

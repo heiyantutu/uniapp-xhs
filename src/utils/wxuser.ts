@@ -1,20 +1,29 @@
 import env from "@/utils/env"
 import config from "@/utils/config";
-
+// #ifdef H5
+import store from "store";
+// #endif
+export function login() {
+	return new Promise((resolve, reject) => {
+		uni.login({
+			success: resolve,
+			fail: reject
+		});
+	});
+}
 export function setStorage(key: string, value: any) {
-  return new Promise((resolve, reject) => {
-    uni.setStorage({
-      key: key,
-      data: value,
-      success: resolve,
-      fail: reject
-    });
-  });
+  // #ifdef MP
+  uni.setStorageSync(key, value);
+  // #endif
+
+  // #ifdef H5
+  store.set(key, value);
+  // #endif
 }
 
 export function getStorage(key: string) {
   if (key == 'config') {
-    if (env.NODE_ENV === 'songzan' || env.NODE_ENV === 'songzanProd') {
+    if (!config.componentAppid) {
       return config
     } else {
       // #ifdef MP-WEIXIN || MP-ALIPAY
@@ -28,6 +37,7 @@ export function getStorage(key: string) {
       // #endif
     }
   }
+  // #ifdef MP
   try {
     var value = uni.getStorageSync(key);
     if (value) {
@@ -38,9 +48,15 @@ export function getStorage(key: string) {
   } catch (e) {
     return "";
   }
+  // #endif
+
+  // #ifdef H5
+  return store.get(key);
+  // #endif
 }
 
 export function removeStorage(key: string) {
+  // #ifdef MP
   return new Promise((resolve, reject) => {
     uni.setStorage({
       key: key,
@@ -49,6 +65,14 @@ export function removeStorage(key: string) {
       fail: reject
     });
   });
+  // #endif
+
+  // #ifdef H5
+  return new Promise((resolve, reject) => {
+    store.set(key, "");
+    resolve(0)
+  });
+  // #endif
 }
 
 export function getLocation(type: string) {

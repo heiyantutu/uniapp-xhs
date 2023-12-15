@@ -1,8 +1,15 @@
 <template>
-  <div class="ui_empty">
-    <image :src="emptyUrl" mode="" class="empty" />
-    <p class="tips">{{tips}}</p>
-    <p class="subTips">{{subTips}}</p>
+  <div class="ui_empty" :class="mode">
+    <div class="tipsBox">
+      <div v-if="mode=='image'">
+        <image :src="emptyUrl" mode="" class="empty" />
+        <p class="tips">{{tips}}</p>
+        <p class="subTips">{{subTips}}</p>
+      </div>
+      <div v-if="mode=='text'" class="textBox">
+        <p class="theTips">{{tips}}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,6 +32,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    mode: {
+      type: String,
+      default: "image",
+    },
   },
   setup(props, context) {
     return {};
@@ -33,8 +44,10 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
 .ui_empty {
-  text-align: center;
-  margin-top: 40px;
+  .tipsBox {
+    text-align: center;
+    padding-top: 30px;
+  }
   .empty {
     width: 120px;
     height: 120px;
@@ -42,7 +55,7 @@ export default defineComponent({
   .tips {
     color: #000;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 500;
     margin-top: 40px;
     margin-bottom: 12px;
   }
@@ -50,6 +63,18 @@ export default defineComponent({
     color: #808080;
     font-size: 14px;
     line-height: 14px;
+  }
+  .theTips {
+    color: #ccc;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;
+  }
+  .textBox {
+    padding-top: 2px;
+    height:274px;
   }
 }
 </style>
