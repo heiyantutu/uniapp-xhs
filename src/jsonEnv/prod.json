@@ -1,0 +1,24 @@
+{
+  "extEnable": true,
+  "extAppid": "wx7b686b57c7863d29",
+  "ext": {
+    "hotelGroupCode": "GCBZG",
+    "hotelGroupId": 2,
+    "hotelCode": 0,
+    "hotelId": 0,
+    "appid": "wx7b686b57c7863d29",
+    "hotelGroupName": "绿云大酒店",
+    "componentAppid": "wxe715bd146a4e468b",
+    "isOpenHotelGroupBook": "T",
+    "isOpenDistribution": "T",
+    "isOpenAdvancedSearch": "T",
+    "mallAppid": "",
+    "isOpenBook": "T",
+    "equipment": "desktop",
+    "isOpenHotelListBigPictureMode": "T",
+    "baseUrlmall": "https://api.wx.gcihotel.net"
+  },
+  "window": {
+    "navigationBarTitleText": "绿云大酒店"
+  }
+}

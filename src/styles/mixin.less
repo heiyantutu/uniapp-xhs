@@ -1,0 +1,39 @@
+.baseBtn {
+  background-color: #000000;
+  background-image: url("https://xcx-1251575231.cos.ap-shanghai.myqcloud.com/songzan/images/btnBlack.png");
+  background-repeat: repeat;
+  text-align: center;
+  background-size: 40px 37.5px;
+  border-radius: 4px;
+  color: #fff;
+  text-align: center;
+}
+
+.line-clamp(@line) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: @line;
+  -webkit-box-orient: vertical;
+}
+
+.textHidden {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expandClick {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    bottom: -30px;
+    left: -30px;
+    z-index: 9;
+  }
+}
